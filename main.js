@@ -36,7 +36,9 @@ function createMixedArr(number){
 
 //создаем и возвращаем заголовок с кнопкой
 function createTwiceTitle(containerGame){
+    //верхняя панель
     let wraperTtile=document.createElement('div');
+    let wrapperNameGame=document.createElement('div');
     let timerDisplay=document.createElement('div');
     let appTitle=document.createElement('h2');
     
@@ -46,17 +48,18 @@ function createTwiceTitle(containerGame){
     timeDalayFormat=timeFormatDisplay(timeDalay/1000);
     minutes=timeDalayFormat.minutes;
     seconds=timeDalayFormat.seconds;
-     timerDisplay.textContent ='0:00';
+    wrapperNameGame.textContent='Выбирите вид игры'
+     timerDisplay.textContent ='***';
     // timerDisplay.textContent =`${minutes}:${seconds}`;
     appTitle.innerHTML='ПАРЫ'
    
-
+    //боковая панель
     let subTitle=document.createElement('p');
     let formStartGame=document.createElement('form');
     let wraperRadioButton=document.createElement('div');
     let input =document.createElement('input');
     let labelInput=document.createElement('label');
-
+        // чекбокс
     let wrapperRadioTimer=document.createElement('div')
     let wrapperRadioMistake=document.createElement('div')
     let wrapperRadioUnlimited=document.createElement('div')
@@ -104,38 +107,32 @@ function createTwiceTitle(containerGame){
     inputRadioUnlimited.setAttribute('name', 'optionGame');
     inputRadioUnlimited.setAttribute('value', 'Unlimited');
     inputRadioUnlimited.setAttribute('checked', 'true');
-    labelRadioUnlimited.setAttribute('for', 'idRadioUnlimited')
-    labelRadioUnlimited.classList.add('m-0', 'pl-1')
-    
+    labelRadioUnlimited.setAttribute('for', 'idRadioUnlimited');
+    labelRadioUnlimited.classList.add('m-0', 'pl-1');
 
-
-     subTitle.textContent='Количество пар не больше 5';
+    subTitle.textContent='Количество пар не больше 5';
     input.placeholder ='1...5';
     input.style.width = '250px'
-
-
     labelRadioTimer.textContent='Таймер'
     labelRadioMistake.textContent='3 ошибки'
     labelRadioUnlimited.textContent='Простая'
-  
-
     buttonStar.textContent ='Старт игры';
     buttonStar.disabled=true;
     buttonReset.textContent ='Сброс игры';
     buttonReset.disabled=true;
 
+        //добавляем поля друг в друша
     wrapperRadioTimer.append(inputRadioTimer, labelRadioTimer);
     wrapperRadioMistake.append(inputRadioMistake, labelRadioMistake)
     wrapperRadioUnlimited.append(inputRadioUnlimited, labelRadioUnlimited)
     wraperRadioButton.append(wrapperRadioTimer, wrapperRadioMistake, wrapperRadioUnlimited);
-    
-    wraperTtile.append(appTitle);
     formStartGame.append(subTitle);
     formStartGame.append(input, labelInput);
     formStartGame.append(wraperRadioButton);
-
     formStartGame.append(buttonStar);
 
+    wraperTtile.append(appTitle);
+    //событие инпута ввода количества карт и проврки на их кол-во и цифровое значени
     input.addEventListener('input', function(){
         if ( parseInt(input.value)>=5) {
             input.classList.add('text-danger');
@@ -151,78 +148,63 @@ function createTwiceTitle(containerGame){
    })
    //взаимодействие с формой
         formStartGame.addEventListener('submit', function(e){
-            
-     e.preventDefault();
-     if (!input.value){
-         return;
-     }
-     
-     
-     //радиокнопки
-     if (inputRadioTimer.checked){
-         console.log('timer')
-        timer(timeDalay, timerDisplay);
-        timerId=setTimeout(openWrapGameOver, timeDalay);
-        timerDisplay.textContent =`${minutes}:${seconds}`;
-    }
-    if (inputRadioMistake.checked){
-        // mistakeCounter=mistakeCounter++;
-        mistakeCounter=0;
-        console.log('mistake', mistakeCounter)
-        
-    }
-    if (inputRadioUnlimited.checked){
-        console.log('Unlimited')
-    }
-    // buttonStar.addEventListener('click', function(){
-    //     containerGame.innerHTML=''
-    // })
+            e.preventDefault();
+            if (!input.value){
+                return;
+            }
+            //радиокнопки
+            if (inputRadioTimer.checked){
+                console.log('timer')
+                timer(timeDalay, timerDisplay);
+                timerId=setTimeout(openWrapGameOver, timeDalay);
+                timerDisplay.textContent =`${minutes}:${seconds}`;
+                wrapperNameGame.textContent='Игра на время'
+            }
+            if (inputRadioMistake.checked){
+                // mistakeCounter=mistakeCounter++;
+                mistakeCounter=0;
+                //нужно создать функция для отображения кол-ва жизней
+                timerDisplay.textContent ='☻☻☻';
+                wrapperNameGame.textContent='Игра на жизнь'
+                console.log('mistake', mistakeCounter)
+            }
+            if (inputRadioUnlimited.checked){
+                console.log('Unlimited');
+                wrapperNameGame.textContent='Простая игра'
+                timerDisplay.textContent ='***';
+            }
+            let idCart=0;
+            let openCloseStatus=false;
+            let mixedArr=createMixedArr(parseInt(input.value));
+            let twiceStatus =false;
 
-        //Задержка и таймер
+            for (const elArr of mixedArr){
+            idCart=idCart+1;
+                 //?
+            let objElemCart={
+                idCart,
+                openCloseStatus,
+                twiceStatus,
+                elArr,
+            }
 
-            // inputRadioTimer;
-            // inputRadioMistake;
-            // inputRadioUnlimited;
-    
+            let basicCart=createBasicCard(objElemCart);
+            let oneCart=basicCart.objCart.wrapperCart;
+            cartArr.push(basicCart);
+            containerGame.append(oneCart)
+            }
+            buttonStar.disabled=false;
+            buttonReset.disabled=false;
 
+            buttonStar.remove();
 
+            formStartGame.append(buttonReset);
 
-        
+            gameOver(buttonReset);
 
-        let idCart=0;
-        let openCloseStatus=false;
-        let mixedArr=createMixedArr(parseInt(input.value));
-        let twiceStatus =false;
-
-        for (const elArr of mixedArr){
-        idCart=idCart+1;
-//?
-        let objElemCart={
-            idCart,
-            openCloseStatus,
-            twiceStatus,
-            elArr,
-        }
-
-        let basicCart=createBasicCard(objElemCart);
-        let oneCart=basicCart.objCart.wrapperCart;
-        cartArr.push(basicCart);
-        containerGame.append(oneCart)
-        }
-        buttonStar.disabled=false;
-        buttonReset.disabled=false;
-
-        buttonStar.remove();
-
-        formStartGame.append(buttonReset);
-
-         gameOver(buttonReset);
-
-        input.setAttribute("disabled", "true");
-    })
-    // console.log('formStartGame', formStartGame);
-    // console.log('wraperTtile', wraperTtile)
-    return {formStartGame, wraperTtile, timerDisplay};
+            input.setAttribute("disabled", "true");
+        })
+    return {formStartGame, wraperTtile, wrapperNameGame, timerDisplay};
 }
 
 //созадем одну карту
@@ -318,6 +300,7 @@ function createSquare(){
 //     }
 //     })
      headWrap.append(twiceTitle.wraperTtile);
+     headWrap.append(twiceTitle.wrapperNameGame);
      headWrap.append(twiceTitle.timerDisplay);
      leftContainer.append(headWrap, containerGame)
      //headWrap.append();
