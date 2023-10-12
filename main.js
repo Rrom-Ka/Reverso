@@ -134,11 +134,27 @@ function createTwiceTitle(containerGame){
     wraperTtile.append(appTitle);
     //событие инпута ввода количества карт и проврки на их кол-во и цифровое значени
     input.addEventListener('input', function(){
+        if (!input.value==''){
+            if (!Number.isInteger(parseInt(input.value))) {
+                console.log('lkjhdglskf')
+                input.classList.add('text-danger');
+                subTitle.classList.add('text-danger', 'font-weight-bold');
+                subTitle.textContent='Введите число';
+                return
+               }else {
+                subTitle.textContent='Количество пар не больше 5';
+                input.classList.remove('text-danger')
+                subTitle.classList.remove('text-danger', 'font-weight-bold');
+            }
+        }else{
+            subTitle.textContent='Количество пар не больше 5';
+        }
         if ( parseInt(input.value)>=5) {
             input.classList.add('text-danger');
             subTitle.classList.add('text-danger', 'font-weight-bold');
            } else {
                input.classList.remove('text-danger')
+               subTitle.classList.remove('text-danger', 'font-weight-bold');
            }
            if (Number.isInteger(parseInt(input.value)) & parseInt(input.value)<=5){
            buttonStar.disabled=false;
@@ -149,9 +165,11 @@ function createTwiceTitle(containerGame){
    //взаимодействие с формой
         formStartGame.addEventListener('submit', function(e){
             e.preventDefault();
+            // console.log('input.aval', input.value)
             if (!input.value){
                 return;
             }
+            
             //радиокнопки
             if (inputRadioTimer.checked){
                 console.log('timer')
