@@ -12,7 +12,7 @@ let containerGame = document.createElement('div');
 containerGame.style.position = 'relative'
 let timerId;
 let buttonReset;
-let timeDalay = 5000;
+let timeDalay = 15000;
 let mistakeCounter = -1;
 //создание массива
 function crateTwiceArr(number = 1) {
@@ -460,6 +460,14 @@ function timer(timeDalay, timerDisplay) {
         timeDalayFormat = timeFormatDisplay(time);
         minutes = timeDalayFormat.minutes;
         seconds = timeDalayFormat.seconds;
+        //меняем цвет таймера в зависимости от осттка времени
+        if (seconds<(timeDalay/1000/2) && seconds>5) {
+          timerDisplay.classList.add('text-warning');
+        }else if (seconds<=5) {
+          console.log(seconds)
+          timerDisplay.classList.remove('text-warning');
+          timerDisplay.classList.add('text-danger');
+        }
 
         if (parseInt(time) <= 0) {
             timerDisplay.innerHTML = `${minutes}:${seconds}`;
