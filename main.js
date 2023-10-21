@@ -334,6 +334,7 @@ function createSquare() {
 //функция учета кликов и статуса карт(открыта - закрыта)
 
 function checkStatusCart(obj) {
+  let srcFlipCard ='./audio/mb_card_deal_08.mp3'
     //проверяем отрыкты ли парна карта, т.е. нах-ся она в statusArr если нет выходим из функции
     //если карта открыта она не кликается функция прерывается
     for (let elAtatusArr of statusArr) {
@@ -352,6 +353,7 @@ function checkStatusCart(obj) {
     if (statusArr.length % 2 == 1) {
         obj.frontWrapperCart.style.transform = 'perspective(600px) rotateY(-180deg)';
         obj.backWrapperCart.style.transform = 'perspective(600px) rotateY(0deg)';
+        soundClick(srcFlipCard);
     }
     //если в массиве кликнутых карт четное число
     if (statusArr.length % 2 == 0) {//если это одна и таже карта удаляем из массива последний элемент
@@ -360,6 +362,7 @@ function checkStatusCart(obj) {
         } else {
             obj.frontWrapperCart.style.transform = 'perspective(600px) rotateY(-180deg)';
             obj.backWrapperCart.style.transform = 'perspective(600px) rotateY(0deg)';
+            soundClick(srcFlipCard);
             if (mistakeCounter==1){
                 console.log('1 ощибка')
             }
@@ -377,6 +380,7 @@ function checkStatusCart(obj) {
                     statusArr[lastElement].backWrapperCart.style.transform = 'perspective(600px) rotateY(180deg)';
                     statusArr.pop();
                     statusArr.pop();
+                    soundClick(srcFlipCard)
                 }
                 setTimeout(transformCartBack, 1000, statusArr)
                 if (mistakeCounter != -1) {
@@ -467,6 +471,7 @@ function timer(timeDalay, timerDisplay) {
           console.log(seconds)
           timerDisplay.classList.remove('text-warning');
           timerDisplay.classList.add('text-danger');
+          soundClick('./audio/zvuk-steklyannyih-chasov.mp3')
         }
 
         if (parseInt(time) <= 0) {
@@ -507,6 +512,13 @@ function startThreeMistake() {
         timerDisplay.classList.add('text-dark');
         mistakeCounter = -1;
     }
+}
+
+//фукция воспроизведения звука при переворачивании карты
+function soundClick(srcfile='./audio/mb_card_deal_08.mp3') {
+  var audio = new Audio(); // Создаём новый элемент Audio
+  audio.src = srcfile; // Указываем путь к звуку "клика"
+  audio.autoplay = true; // Автоматически запускаем
 }
 
 
