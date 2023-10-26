@@ -174,6 +174,9 @@ function createTwiceTitle(containerGame) {
         //радиокнопки
         if (inputRadioTimer.checked) {
             console.log('timer')
+            timeDalayFormat = timeFormatDisplay(timeDalay / 1000);
+            minutes = timeDalayFormat.minutes;
+            seconds = timeDalayFormat.seconds;
             timer(timeDalay, timerDisplay);
             timerId = setTimeout(openWrapGameOver, timeDalay);
             timerDisplay.textContent = `${minutes}:${seconds}`;
@@ -190,8 +193,14 @@ function createTwiceTitle(containerGame) {
         }
         if (inputRadioUnlimited.checked) {
             console.log('Unlimited');
+            timeDalayFormat = timeFormatDisplay(0 / 1000);
+            minutes = timeDalayFormat.minutes;
+            seconds = timeDalayFormat.seconds;
             wrapperNameGame.textContent = 'Простая игра'
-            timerDisplay.textContent = '***';
+            timerEmpty(timerDisplay)
+            // timerDisplay.textContent = '00:00'
+            console.log('timerDisplay', timerDisplay)
+            timerDisplay.textContent = `${minutes}:${seconds}`;
         }
         let idCart = 0;
         let openCloseStatus = false;
@@ -485,6 +494,30 @@ function timer(timeDalay, timerDisplay) {
     }
     let stopInterval = setInterval(timerStap, 1000);
 }
+
+//фукция прямого таймера
+
+function timerEmpty(timerDisplay) {
+  // amountTimeValue=parseInt(amountTime.value)
+  let time = 1;
+  //timerDisplay.innerHTML=time;
+  function timerStap() {
+      timeDalayFormat = timeFormatDisplay(time);
+      minutes = timeDalayFormat.minutes;
+      seconds = timeDalayFormat.seconds;
+      if (parseInt(time) >= 600) {
+          timerDisplay.innerHTML = `${minutes}:${seconds}`;
+          clearInterval(stopInterval)
+      }
+      if (time < 600) {
+          timerDisplay.innerHTML = `${minutes}:${seconds}`;
+          console.log(seconds)
+          time++;
+      }
+  }
+  let stopInterval = setInterval(timerStap, 1000);
+}
+
 //фукция правильного отображения секунд (01,02) на экране
 function timeFormatDisplay(timeSeconds) {
     const minutes = Math.floor(timeSeconds / 60);
